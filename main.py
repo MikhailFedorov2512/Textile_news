@@ -69,7 +69,13 @@ def baltiiskiy_tekstil():
 
 def textime():
   url = 'https://www.textime.ru/news/'
-  result = requests.get(url)
+  headers = requests.utils.default_headers()
+  headers.update(
+    {
+      'User-Agent': 'My User Agent 1.0',
+    }
+  )
+  result = requests.get(url, headers=headers, verify = False)
   resultlist=[]
   titles=[]
   dates=[]
@@ -302,6 +308,7 @@ def russkiy_dom():
   df = pd.DataFrame(list((zip(name,titles,dates,links))))
   return df
 
+
 russkiy_dom = russkiy_dom()
 balteks_balashov = balteks_balashov()
 rutkani = rutkani()
@@ -311,8 +318,7 @@ mogotex = mogotex()
 raiteks = raiteks()
 mirteks = mirteks()
 baltiiskiy_tekstil = baltiiskiy_tekstil()
-#textime=textime()
+textime=textime()
 nordtex=nordtex()
-
-resultdf=pd.concat([baltiiskiy_tekstil,nordtex,mirteks,raiteks,mogotex, chaikovskiy_tekstil,shuiskie_sitcy,rutkani,balteks_balashov,russkiy_dom])
+resultdf=pd.concat([baltiiskiy_tekstil,nordtex,mirteks,raiteks,mogotex, textime,chaikovskiy_tekstil,shuiskie_sitcy,rutkani,balteks_balashov,russkiy_dom])
 resultdf.to_csv('result.csv', index=False,encoding='utf-8',header=['компания','новость','дата','ссылка'])
